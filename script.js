@@ -31,4 +31,12 @@ addBookToLibrary(
     false
 );
 
+//get the library container DOM
+const libraryContainer = document.querySelector("#library");
+//creating the book card
+const bookCard = document.createElement("div");
+bookCard.textContent = "The Hobbit";
+libraryContainer.appendChild(bookCard);
+
+
 console.log(myLibrary);
