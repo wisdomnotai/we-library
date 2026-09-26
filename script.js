@@ -1,17 +1,27 @@
-function Book(title,author,pages,read){
+function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
+    this.id = crypto.randomUUID();
 }
 
-const book1 = new Book("The Hobbit", "J.R.R Tolkein", 310, true);
-const book2 = new Book("Harry Potter","J.K. Rowling",310,false);
-console.log(book1);
-document.write(book1.title);
-
-//creating the array for in-memory storage
 const myLibrary = [];
+
+const book1 = new Book(
+    "The Hobbit",
+    "J.R.R. Tolkien",
+    310,
+    true
+);
+
+const book2 = new Book(
+    "Atomic Habits",
+    "James Clear",
+    320,
+    false
+);
+
 myLibrary.push(book1);
 myLibrary.push(book2);
 
