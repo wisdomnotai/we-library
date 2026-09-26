@@ -8,21 +8,27 @@ function Book(title, author, pages, read) {
 
 const myLibrary = [];
 
-const book1 = new Book(
+
+//function to add a book to the library
+const addBookToLibrary =(title, author, pages, read) => {
+    //create the new book inside the function
+    const book = new Book(title, author, pages, read);
+    //add the new book to the myLibrary Array
+    myLibrary.push(book);
+}
+
+addBookToLibrary(
     "The Hobbit",
     "J.R.R. Tolkien",
     310,
     true
 );
 
-const book2 = new Book(
+addBookToLibrary(
     "Atomic Habits",
     "James Clear",
     320,
     false
 );
-
-myLibrary.push(book1);
-myLibrary.push(book2);
 
 console.log(myLibrary);
