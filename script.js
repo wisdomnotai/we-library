@@ -33,10 +33,31 @@ addBookToLibrary(
 
 //get the library container DOM
 const libraryContainer = document.querySelector("#library");
-//creating the book card
-const bookCard = document.createElement("div");
-bookCard.textContent = "The Hobbit";
-libraryContainer.appendChild(bookCard);
 
 
-console.log(myLibrary);
+//function to display the books in the array
+const displayBooks = () => {
+    //looping through the library array to create a book card
+    myLibrary.forEach((book)=>{
+    //creating the book card
+    const bookCard = document.createElement("div");
+    bookCard.dataset.id = book.id;
+    bookCard.innerHTML = `<h2>${book.title}</h2> <p>${book.author}</p> <p>${book.pages} pages</p> 
+    <p>${book.read ? "Read" :"Not read yet"}</p>
+    <button data-id = "${book.id}" class = "remove-button">Remove</button>`;
+    libraryContainer.appendChild(bookCard);
+})}
+
+displayBooks();
+
+//function to delete books
+const removeButtons = document.querySelectorAll(".remove-button");
+removeButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+        const bookId = event.target.dataset.id;
+        const book = myLibrary.find((book) => book.id ===book.id);
+        const bookIndex = myLibrary.findIndex((book) => book.id === bookId);
+        myLibrary.splice(bookIndex,1);
+        console.log(myLibrary);
+    })
+});
