@@ -6,16 +6,22 @@ function Book(title, author, pages, read) {
     this.id = crypto.randomUUID();
 }
 
+Book.prototype.toggleRead = function () {
+    this.read = !this.read;
+};
+
 const myLibrary = [];
 
 
-//function to add a book to the library
-const addBookToLibrary =(title, author, pages, read) => {
-    //create the new book inside the function
+// Function to add a book to the library
+const addBookToLibrary = (title, author, pages, read) => {
+    // Create the new book inside the function
     const book = new Book(title, author, pages, read);
-    //add the new book to the myLibrary Array
+
+    // Add the new book to the myLibrary array
     myLibrary.push(book);
-}
+};
+
 
 addBookToLibrary(
     "The Hobbit",
@@ -31,33 +37,89 @@ addBookToLibrary(
     false
 );
 
-//get the library container DOM
+
+// Get the library container DOM
 const libraryContainer = document.querySelector("#library");
 
 
-//function to display the books in the array
+// Function to display the books in the array
 const displayBooks = () => {
-    //looping through the library array to create a book card
-    myLibrary.forEach((book)=>{
-    //creating the book card
-    const bookCard = document.createElement("div");
-    bookCard.dataset.id = book.id;
-    bookCard.innerHTML = `<h2>${book.title}</h2> <p>${book.author}</p> <p>${book.pages} pages</p> 
-    <p>${book.read ? "Read" :"Not read yet"}</p>
-    <button data-id = "${book.id}" class = "remove-button">Remove</button>`;
-    libraryContainer.appendChild(bookCard);
-})}
+
+    // Loop through the library array to create a book card
+    myLibrary.forEach((book) => {
+
+        // Create the book card
+        const bookCard = document.createElement("div");
+
+        // Give the card the book's unique ID
+        bookCard.dataset.id = book.id;
+
+        // Add the book information to the card
+        bookCard.innerHTML = `
+            <h2>${book.title}</h2>
+            <p>${book.author}</p>
+            <p>${book.pages} pages</p>
+            <p>${book.read ? "Read" : "Not read yet"}</p>
+
+            <button class="toggle-read" data-id="${book.id}">
+                Mark as read
+            </button>
+
+            <button class="remove-button" data-id="${book.id}">
+                Remove
+            </button>
+        `;
+
+        // Put the card on the webpage
+        libraryContainer.appendChild(bookCard);
+    });
+};
+
 
 displayBooks();
 
-//function to delete books
-const removeButtons = document.querySelectorAll(".remove-button");
-removeButtons.forEach((button) => {
+
+// Function to mark a book as read/unread
+const readButtons = document.querySelectorAll(".toggle-read");
+
+readButtons.forEach((button) => {
+
     button.addEventListener("click", (event) => {
+
         const bookId = event.target.dataset.id;
-        const book = myLibrary.find((book) => book.id ===book.id);
-        const bookIndex = myLibrary.findIndex((book) => book.id === bookId);
-        myLibrary.splice(bookIndex,1);
+
+        const book = myLibrary.find(
+            (book) => book.id === bookId
+        );
+
+        book.toggleRead();
+
+        console.log(book.read);
+    });
+});
+
+
+// Function to delete books
+const removeButtons = document.querySelectorAll(".remove-button");
+
+removeButtons.forEach((button) => {
+
+    button.addEventListener("click", (event) => {
+
+        const bookId = event.target.dataset.id;
+
+        const bookIndex = myLibrary.findIndex(
+            (book) => book.id === bookId
+        );
+
+        myLibrary.splice(bookIndex, 1);
+
         console.log(myLibrary);
-    })
+
+        const bookCard = document.querySelector(
+            `[data-id="${bookId}"]`
+        );
+
+        bookCard.remove();
+    });
 });
