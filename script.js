@@ -123,3 +123,17 @@ removeButtons.forEach((button) => {
         bookCard.remove();
     });
 });
+//Dialog box for adding new books
+const newBookButton = document.querySelector("#new-book-button")
+const newBookDialog = document.querySelector("#book-dialog");
+
+//functonality to open dialog box
+newBookButton.addEventListener("click", () => {
+    newBookDialog.showModal();
+})
+
+//functionality to close dialog box
+const closeDialogButton = document.querySelector("#cancel-button");
+closeDialogButton.addEventListener("click",() => {
+    newBookDialog.close();
+})
