@@ -10,19 +10,18 @@ Book.prototype.toggleRead = function () {
     this.read = !this.read;
 };
 
+
 const myLibrary = [];
 
 
-// Function to add a book to the library
+// Add a book to the library
 const addBookToLibrary = (title, author, pages, read) => {
-    // Create the new book inside the function
     const book = new Book(title, author, pages, read);
-
-    // Add the new book to the myLibrary array
     myLibrary.push(book);
 };
 
 
+// Starting books
 addBookToLibrary(
     "The Hobbit",
     "J.R.R. Tolkien",
@@ -38,31 +37,35 @@ addBookToLibrary(
 );
 
 
-// Get the library container DOM
+// Get the library container
 const libraryContainer = document.querySelector("#library");
 
 
-// Function to display the books in the array
+// Display all books
 const displayBooks = () => {
 
-    // Loop through the library array to create a book card
+    // Clear the library before displaying
+    libraryContainer.innerHTML = "";
+
+    // Create a card for every book
     myLibrary.forEach((book) => {
 
-        // Create the book card
         const bookCard = document.createElement("div");
 
         // Give the card the book's unique ID
         bookCard.dataset.id = book.id;
 
-        // Add the book information to the card
         bookCard.innerHTML = `
             <h2>${book.title}</h2>
-            <p>${book.author}</p>
+
+            <p>Author: ${book.author}</p>
+
             <p>${book.pages} pages</p>
+
             <p>${book.read ? "Read" : "Not read yet"}</p>
 
             <button class="toggle-read" data-id="${book.id}">
-                Mark as read
+                ${book.read ? "Mark as unread" : "Mark as read"}
             </button>
 
             <button class="remove-button" data-id="${book.id}">
@@ -70,87 +73,111 @@ const displayBooks = () => {
             </button>
         `;
 
-        // Put the card on the webpage
         libraryContainer.appendChild(bookCard);
+    });
+
+
+    // Add functionality to the read buttons
+    const readButtons = document.querySelectorAll(".toggle-read");
+
+    readButtons.forEach((button) => {
+
+        button.addEventListener("click", (event) => {
+
+            const bookId = event.target.dataset.id;
+
+            const book = myLibrary.find(
+                (book) => book.id === bookId
+            );
+
+            book.toggleRead();
+
+            displayBooks();
+        });
+    });
+
+
+    // Add functionality to the remove buttons
+    const removeButtons = document.querySelectorAll(".remove-button");
+
+    removeButtons.forEach((button) => {
+
+        button.addEventListener("click", (event) => {
+
+            const bookId = event.target.dataset.id;
+
+            const bookIndex = myLibrary.findIndex(
+                (book) => book.id === bookId
+            );
+
+            myLibrary.splice(bookIndex, 1);
+
+            displayBooks();
+        });
     });
 };
 
 
+// Display the books when the page loads
 displayBooks();
 
 
-// Function to mark a book as read/unread
-const readButtons = document.querySelectorAll(".toggle-read");
+const newBookButton = document.querySelector("#new-book-button");
 
-readButtons.forEach((button) => {
-
-    button.addEventListener("click", (event) => {
-
-        const bookId = event.target.dataset.id;
-
-        const book = myLibrary.find(
-            (book) => book.id === bookId
-        );
-
-        book.toggleRead();
-
-        console.log(book.read);
-    });
-});
-
-
-// Function to delete books
-const removeButtons = document.querySelectorAll(".remove-button");
-
-removeButtons.forEach((button) => {
-
-    button.addEventListener("click", (event) => {
-
-        const bookId = event.target.dataset.id;
-
-        const bookIndex = myLibrary.findIndex(
-            (book) => book.id === bookId
-        );
-
-        myLibrary.splice(bookIndex, 1);
-
-        console.log(myLibrary);
-
-        const bookCard = document.querySelector(
-            `[data-id="${bookId}"]`
-        );
-
-        bookCard.remove();
-    });
-});
-//Dialog box for adding new books
-const newBookButton = document.querySelector("#new-book-button")
 const newBookDialog = document.querySelector("#book-dialog");
 
-//functonality to open dialog box
+
+// Open the dialog
 newBookButton.addEventListener("click", () => {
     newBookDialog.showModal();
-})
+});
 
-//functionality to close dialog box
+
+// Close the dialog
 const closeDialogButton = document.querySelector("#cancel-button");
-closeDialogButton.addEventListener("click",() => {
+
+closeDialogButton.addEventListener("click", () => {
     newBookDialog.close();
-})
+});
 
-//getting the form input
-bookForm = document.querySelector("#book-form");
 
-bookForm.addEventListerner("submit", (event) =>{
+// Get the form
+const bookForm = document.querySelector("#book-form");
+
+
+// Handle form submission
+bookForm.addEventListener("submit", (event) => {
+
+    // Stop the browser from refreshing the page
     event.preventDefault();
 
-    const title = document.querySelector("#title").values;
-    const author = document.querySelector("#author").values;
-    const pages = document.querySelector("#pages").values;
+    // Get the values from the form
+    const title = document.querySelector("#title").value;
+
+    const author = document.querySelector("#author").value;
+
+    const pages = document.querySelector("#pages").value;
+
     const read = document.querySelector("#read").checked;
 
-    addBookToLibrary(title,author,pages,read);
 
+    // Create and add the new book
+    addBookToLibrary(
+        title,
+        author,
+        pages,
+        read
+    );
+
+
+    // Display the updated library
     displayBooks();
-})
 
+
+    // Close the dialog
+    newBookDialog.close();
+
+
+    // Clear the form
+    bookForm.reset();
+});
