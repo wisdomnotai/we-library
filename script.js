@@ -137,3 +137,20 @@ const closeDialogButton = document.querySelector("#cancel-button");
 closeDialogButton.addEventListener("click",() => {
     newBookDialog.close();
 })
+
+//getting the form input
+bookForm = document.querySelector("#book-form");
+
+bookForm.addEventListerner("submit", (event) =>{
+    event.preventDefault();
+
+    const title = document.querySelector("#title").values;
+    const author = document.querySelector("#author").values;
+    const pages = document.querySelector("#pages").values;
+    const read = document.querySelector("#read").checked;
+
+    addBookToLibrary(title,author,pages,read);
+
+    displayBooks();
+})
+
